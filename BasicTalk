@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Talk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+        }
+        #input-area {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2 id="app-title">Basic Talk</h2>
+
+    <div id="language-selection">
+        <label for="language">Language:</label>
+        <select id="language" onchange="changeLanguage()">
+            <option value="en" selected>English</option>
+            <option value="tr">Türkçe</option>
+            <option value="ru">Русский</option>
+            <option value="de">Deutsch</option>
+        </select>
+    </div>
+
+    <div id="username-area">
+        <label for="username" id="username-label">Username:</label>
+        <input type="text" id="username">
+        <button onclick="setUsername()" id="login-button">Login</button>
+    </div>
+
+    <div id="chat-area" style="display: none;">
+        <div id="messages"></div>
+        <div id="input-area">
+            <input type="text" id="message-input">
+            <button onclick="sendMessage()" id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        var username = "";
+        var currentLanguage = "en"; // Default language is English
+
+        var translations = {
+            "tr": {
+                "appTitle": "Basit Mesaj",
+                "languageLabel": "Dil:",
+                "usernameLabel": "Kullanıcı Adı:",
+                "loginButton": "Giriş Yap",
+                "sendButton": "Gönder"
+            },
+            "ru": {
+                "appTitle": "основной разговор",
+                "languageLabel": "Язык:",
+                "usernameLabel": "Имя пользователя:",
+                "loginButton": "Войти",
+                "sendButton": "Отправить"
+            },
+            "en": {
+                "appTitle": "Basic Talk",
+                "languageLabel": "Language:",
+                "usernameLabel": "Username:",
+                "loginButton": "Login",
+                "sendButton": "Send"
+            },
+            "de": {
+                "appTitle": "Grundlegendes Gespräch",
+                "languageLabel": "Sprache:",
+                "usernameLabel": "Benutzername:",
+                "loginButton": "Anmelden",
+                "sendButton": "Senden"
+            }
+        };
+
+        function changeLanguage() {
+            var languageSelect = document.getElementById("language");
+            var selectedLanguage = languageSelect.value;
+            currentLanguage = selectedLanguage;
+
+            // Update UI elements based on selected language
+            var appTitle = document.getElementById("app-title");
+            var languageLabel = document.querySelector("label[for='language']");
+            var usernameLabel = document.getElementById("username-label");
+            var loginButton = document.getElementById("login-button");
+            var sendButton = document.getElementById("send-button");
+
+            appTitle.textContent = translations[selectedLanguage]["appTitle"];
+            languageLabel.textContent = translations[selectedLanguage]["languageLabel"];
+            usernameLabel.textContent = translations[selectedLanguage]["usernameLabel"];
+            loginButton.textContent = translations[selectedLanguage]["loginButton"];
+            sendButton.textContent = translations[selectedLanguage]["sendButton"];
+        }
+
+        function setUsername() {
+            var usernameInput = document.getElementById("username");
+            username = usernameInput.value.trim();
+            if (username !== "") {
+                document.getElementById("username-area").style.display = "none";
+                document.getElementById("chat-area").style.display = "block";
+            }
+        }
+
+        function sendMessage() {
+            var messageInput = document.getElementById("message-input");
+            var message = messageInput.value.trim();
+            if (message !== "") {
+                displayMessage(username, message);
+                messageInput.value = "";
+            }
+        }
+
+        function displayMessage(username, message) {
+            var messagesDiv = document.getElementById("messages");
+            var messageContainer = document.createElement("div");
+            messageContainer.classList.add("message-container");
+
+            var messageInfo = document.createElement("span");
+            messageInfo.textContent = username + ": ";
+            messageInfo.classList.add("message-info");
+
+            var messageText = document.createElement("span");
+            messageText.textContent = message;
+
+            messageContainer.appendChild(messageInfo);
+            messageContainer.appendChild(messageText);
+            messagesDiv.appendChild(messageContainer);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
